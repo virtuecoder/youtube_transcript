@@ -217,8 +217,15 @@ class YouTubeTranscriptCLI:
             avg_time_per_video = elapsed / i if i > 1 else 0
             remaining = avg_time_per_video * (total_videos - i)
             
-            print(f"\nProcessing video {i}/{total_videos} ({i/total_videos:.1%}) - {video_id}")
-            print(f"Elapsed: {timedelta(seconds=int(elapsed))} | Remaining: ~{timedelta(seconds=int(remaining))}")
+            video_title = video.title if hasattr(video, 'title') and video.title else video_id
+            spin_chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+            spin_char = spin_chars[int(time.time() * 10) % len(spin_chars)]
+            progress_line = f"\r{spin_char} Processing: {i}/{total_videos} ({i/total_videos:.1%}) | {video_title[:30]} | "
+            progress_line += f"Time: {timedelta(seconds=int(elapsed))} | Est: ~{timedelta(seconds=int(remaining))}"
+            
+            # Print the combined line
+            sys.stdout.write(progress_line)
+            sys.stdout.flush()
             
             try:
                 status, transcript_data = transcript.download()
@@ -307,7 +314,7 @@ class YouTubeTranscriptCLI:
         
     def _print_summary(self, audio_enabled: bool) -> None:
         """Print processing summary."""
-        print("\nDownload summary:")
+        print("\n\nDownload summary:")
         print(f"- Successfully downloaded transcripts: {self.stats.get('success', 0)}")
         print(f"- Skipped (already exists): {self.stats.get('skipped', 0)}")
         print(f"- Live events skipped: {self.stats.get('live', 0)}")
