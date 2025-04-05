@@ -16,7 +16,7 @@ from .utils.exceptions import (
 class Transcript:
     """Handles YouTube transcript downloading and processing."""
     
-    def __init__(self, video: Video, output_dir: str = 'transcripts'):
+    def __init__(self, video: Video, output_dir: str = 'output'):
         """
         Initialize with a Video instance and output directory.
         
@@ -75,7 +75,7 @@ class Transcript:
             self._transcript_data = {
                 'title': self.video.title,
                 'video_id': self.video.video_id,
-                'timestamp': int(time.time()),
+                'published_date': self.video.published_date,
                 'transcript': transcript
             }
             
@@ -104,7 +104,7 @@ class Transcript:
             'title': self.video.title,
             'video_id': self.video.video_id,
             'error': error_type,
-            'timestamp': int(time.time())
+            'published_date': self.video.published_date
         }
         
         with open(self.transcript_path, 'w') as f:

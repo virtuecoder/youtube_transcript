@@ -21,6 +21,7 @@ class Video:
         self._title = None
         self._is_live = None
         self._is_unavailable = None
+        self._published_date = None
         
     @property
     def url(self) -> str:
@@ -71,6 +72,9 @@ class Video:
                 # Check availability
                 self._is_unavailable = info.get('availability') == 'unavailable' or 'Video unavailable' in str(info)
                 
+                # Get published date
+                self._published_date = info.get('upload_date')
+                
         except yt_dlp.utils.DownloadError as e:
             if 'Video unavailable' in str(e):
                 self._is_unavailable = True
@@ -82,6 +86,13 @@ class Video:
                 raise CookieError(f"Cookie error: {e}") from e
             raise InvalidVideoError(f"Error getting video info: {e}") from e
             
+    @property
+    def published_date(self) -> Optional[str]:
+        """Get video published date (fetches if not already cached)."""
+        if self._published_date is None:
+            self._fetch_video_info()
+        return self._published_date
+
     def get_safe_title(self) -> str:
         """
         Get a filesystem-safe version of the video title.

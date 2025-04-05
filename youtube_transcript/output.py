@@ -11,7 +11,7 @@ from .utils.exceptions import OutputError
 class Output:
     """Handles generating output files from transcripts and audio."""
     
-    def __init__(self, output_dir: str = '.'):
+    def __init__(self, output_dir: str = 'output'):
         """
         Initialize with output directory.
         
@@ -45,13 +45,9 @@ class Output:
             
         # Get channel username from URL (after @ symbol)
         channel_username = channel_url.split('@')[-1].split('/')[0] if '@' in channel_url else 'channel'
-        
-        # Create channel subfolder if it doesn't exist
-        channel_subfolder = os.path.join(self.output_dir, channel_username)
-        os.makedirs(channel_subfolder, exist_ok=True)
             
         output_file = os.path.join(
-            channel_subfolder,
+            self.output_dir,
             f"{filename or channel_username}.md"
         )
         
@@ -67,10 +63,11 @@ class Output:
                 video_url = f"https://www.youtube.com/watch?v={video_id}" if video_id else ''
                 
                 # Video header with title, URL and date
-                video_date = transcript_data.get('timestamp', '')
+                video_date = transcript_data.get('published_date', '')
                 if video_date:
                     try:
-                        video_date = time.strftime('%Y-%m-%d', time.localtime(video_date))
+                        # Format YYYYMMDD to YYYY-MM-DD
+                        video_date = f"{video_date[:4]}-{video_date[4:6]}-{video_date[6:8]}"
                     except:
                         video_date = ''
                 f.write(f"## [{video_title}]({video_url}) {video_date}\n\n")
@@ -157,10 +154,17 @@ class Output:
                 video_id = transcript_data.get('video_id', '')
                 video_url = f"https://www.youtube.com/watch?v={video_id}" if video_id else ''
                 
-                # Video section
+                # Video section with date
+                video_date = transcript_data.get('published_date', '')
+                if video_date:
+                    try:
+                        # Format YYYYMMDD to YYYY-MM-DD
+                        video_date = f"{video_date[:4]}-{video_date[4:6]}-{video_date[6:8]}"
+                    except:
+                        video_date = ''
                 f.write(f"""
     <div class="video-transcript">
-        <h2><a href="{video_url}">{video_title}</a></h2>
+        <h2><a href="{video_url}">{video_title}</a> {video_date}</h2>
 """)
                 
                 # Write transcript text
