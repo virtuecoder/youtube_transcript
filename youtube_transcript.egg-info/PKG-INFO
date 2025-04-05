@@ -1,0 +1,108 @@
+Metadata-Version: 2.4
+Name: youtube-transcript
+Version: 0.1.0
+Summary: YouTube transcript and audio downloader with multiple output formats
+Home-page: https://github.com/yourusername/youtube-transcript
+Author: Your Name
+Author-email: your.email@example.com
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: youtube-transcript-api>=0.4.1
+Requires-Dist: yt-dlp>=2023.7.6
+Requires-Dist: SpeechRecognition>=3.8.1
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# YouTube Transcript Downloader
+
+A Python package for downloading YouTube transcripts and audio with multiple output formats.
+
+## Features
+
+- Download transcripts from YouTube videos and channels
+- Fallback to audio download and transcription when transcripts are unavailable
+- Multiple output formats (Markdown, HTML)
+- Channel-wide processing
+- Progress tracking and resumable downloads
+- Cookie authentication support
+
+## Installation
+
+```bash
+pip install -e .
+```
+
+For development:
+```bash
+pip install -e ".[dev]"
+```
+
+## Usage
+
+### Basic channel transcript download
+```bash
+yt-transcript https://www.youtube.com/c/ChannelName
+```
+
+### With audio fallback
+```bash
+yt-transcript https://www.youtube.com/c/ChannelName --audio
+```
+
+### Using cookies for authentication
+```bash
+yt-transcript https://www.youtube.com/c/ChannelName --cookies cookies.txt
+```
+
+### HTML output format
+```bash
+yt-transcript https://www.youtube.com/c/ChannelName --output-format html
+```
+
+### Extract cookies from browser
+```bash
+yt-transcript https://www.youtube.com/c/ChannelName --cookies-from-browser chrome
+```
+
+## Configuration
+
+The following options are available:
+
+| Option | Description |
+|--------|-------------|
+| `--audio` | Download audio when transcripts are unavailable |
+| `--cookies` | Path to cookies file for authentication |
+| `--cookies-from-browser` | Extract cookies from browser (chrome, firefox, etc) |
+| `--output-format` | Output format (markdown or html) |
+| `--output-file` | Custom output filename |
+
+## Development
+
+### Running tests
+```bash
+pytest
+```
+
+### Building package
+```bash
+python setup.py sdist bdist_wheel
+```
+
+## License
+
+MIT
