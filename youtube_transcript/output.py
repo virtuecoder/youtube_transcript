@@ -43,19 +43,16 @@ class Output:
         if not transcripts:
             raise OutputError("No transcripts provided for markdown generation")
             
-        # Generate safe filename
-        safe_chars = (' ', '-', '_')
-        safe_channel_name = "".join(
-            c if c.isalnum() or c in safe_chars else '_' 
-            for c in channel_name
-        ).rstrip()
+        # Get channel username from URL (after @ symbol)
+        channel_username = channel_url.split('@')[-1].split('/')[0] if '@' in channel_url else 'channel'
         
-        if not safe_channel_name:
-            safe_channel_name = "YouTube_Channel"
+        # Create channel subfolder if it doesn't exist
+        channel_subfolder = os.path.join(self.output_dir, channel_username)
+        os.makedirs(channel_subfolder, exist_ok=True)
             
         output_file = os.path.join(
-            self.output_dir,
-            f"{filename or safe_channel_name}.md"
+            channel_subfolder,
+            f"{filename or channel_username}.md"
         )
         
         with open(output_file, 'w', encoding='utf-8') as f:
@@ -69,8 +66,14 @@ class Output:
                 video_id = transcript_data.get('video_id', '')
                 video_url = f"https://www.youtube.com/watch?v={video_id}" if video_id else ''
                 
-                # Video header with title and URL
-                f.write(f"## {video_title} - {video_url}\n\n")
+                # Video header with title, URL and date
+                video_date = transcript_data.get('timestamp', '')
+                if video_date:
+                    try:
+                        video_date = time.strftime('%Y-%m-%d', time.localtime(video_date))
+                    except:
+                        video_date = ''
+                f.write(f"## [{video_title}]({video_url}) {video_date}\n\n")
                 
                 # Write transcript text
                 transcript_items = transcript_data.get('transcript', [])

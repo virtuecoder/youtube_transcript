@@ -70,17 +70,17 @@ class YouTubeTranscriptCLI:
     def run(self, args: List[str] = None) -> int:
         """Main entry point for the CLI application."""
         start_time = time.time()
-        args = self.parse_args(args)
+        self.args = self.parse_args(args)
         
         try:
             # Handle cookies
-            cookies_file = self._handle_cookies(args)
+            cookies_file = self._handle_cookies(self.args)
             
             # Initialize channel
-            channel = Channel(args.channel_url, cookies_file)
-            self._update_progress(channel_url=args.channel_url)
+            channel = Channel(self.args.channel_url, cookies_file)
+            self._update_progress(channel_url=self.args.channel_url)
             
-            print(f"Processing channel: {args.channel_url}")
+            print(f"Processing channel: {self.args.channel_url}")
             self._print_channel_info(channel)
             
             # Fetch all videos
@@ -93,17 +93,17 @@ class YouTubeTranscriptCLI:
             self._update_progress(total_videos=len(video_urls), status='processing')
             
             # Process each video
-            self._process_videos(video_urls, channel, args.audio, cookies_file)
+            self._process_videos(video_urls, channel, self.args.audio, cookies_file)
             
             # Print summary
-            self._print_summary(args.audio)
+            self._print_summary(self.args.audio)
             
             # Process audio transcripts if requested
-            if args.audio:
+            if self.args.audio:
                 self._process_audio_transcripts(video_urls)
                 
             # Create merged output file
-            output_file = self._create_output_file(channel.name, args.channel_url, args.output_format, args.output_file)
+            output_file = self._create_output_file(channel.name, self.args.channel_url, self.args.output_format, self.args.output_file)
             if output_file:
                 print(f"\nTranscripts merged into: {output_file}")
                 
@@ -112,7 +112,7 @@ class YouTubeTranscriptCLI:
             self._update_progress(status='interrupted')
             if self.successful_transcripts:
                 output_file = self._create_output_file(
-                    channel.name, args.channel_url, args.output_format, args.output_file
+                    channel.name, self.args.channel_url, self.args.output_format, self.args.output_file
                 )
                 if output_file:
                     print(f"Partial transcripts merged into: {output_file}")
@@ -209,7 +209,7 @@ class YouTubeTranscriptCLI:
         
         for i, url in enumerate(video_urls, 1):
             video_id = url.split('/')[-1]
-            video = Video(video_id, cookies)
+            video = Video(video_id, cookies, self.args.channel_url)
             transcript = Transcript(video)
             
             # Calculate progress metrics
@@ -264,7 +264,7 @@ class YouTubeTranscriptCLI:
         
         for url in video_urls:
             video_id = url.split('/')[-1]
-            audio = Audio(Video(video_id))
+            audio = Audio(Video(video_id, channel_url=self.args.channel_url))
             
             if audio.transcribe():
                 audio_transcripts += 1

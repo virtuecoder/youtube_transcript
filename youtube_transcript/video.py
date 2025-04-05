@@ -6,16 +6,18 @@ from .utils.exceptions import InvalidVideoError, CookieError
 class Video:
     """Handles YouTube video information and operations."""
     
-    def __init__(self, video_id: str, cookies: Optional[str] = None):
+    def __init__(self, video_id: str, cookies: Optional[str] = None, channel_url: Optional[str] = None):
         """
         Initialize with video ID and optional cookies file.
         
         Args:
             video_id: YouTube video ID
             cookies: Path to cookies file for authenticated requests
+            channel_url: URL of the YouTube channel this video belongs to
         """
         self.video_id = video_id
         self.cookies = cookies
+        self.channel_url = channel_url
         self._title = None
         self._is_live = None
         self._is_unavailable = None

@@ -31,11 +31,15 @@ class Transcript:
     @property
     def transcript_path(self) -> str:
         """Get the full path where transcript should be stored."""
-        channel_subfolder = os.path.join(self.output_dir, self.video.get_safe_title())
+        # Get channel username from URL (after @ symbol)
+        channel_url = self.video.channel_url
+        channel_username = channel_url.split('@')[-1].split('/')[0] if '@' in channel_url else 'channel'
+        
+        channel_subfolder = os.path.join(self.output_dir, channel_username)
         os.makedirs(channel_subfolder, exist_ok=True)
         return os.path.join(
             channel_subfolder,
-            f'{self.video.get_safe_title()}_{self.video.video_id}.json'
+            f'{self.video.video_id}.json'
         )
         
     def download(self) -> Tuple[str, Optional[Dict[str, Any]]]:
