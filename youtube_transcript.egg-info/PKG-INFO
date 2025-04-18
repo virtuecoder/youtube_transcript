@@ -1,4 +1,4 @@
-Metadata-Version: 2.4
+Metadata-Version: 2.1
 Name: youtube-transcript
 Version: 0.1.0
 Summary: YouTube transcript and audio downloader with multiple output formats
@@ -18,15 +18,6 @@ Description-Content-Type: text/markdown
 Requires-Dist: youtube-transcript-api>=0.4.1
 Requires-Dist: yt-dlp>=2023.7.6
 Requires-Dist: SpeechRecognition>=3.8.1
-Dynamic: author
-Dynamic: author-email
-Dynamic: classifier
-Dynamic: description
-Dynamic: description-content-type
-Dynamic: home-page
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
 
 # YouTube Transcript Downloader
 

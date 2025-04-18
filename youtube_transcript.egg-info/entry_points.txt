@@ -1,2 +1,3 @@
 [console_scripts]
+md-split = youtube_transcript.file_splitter_cli:main
 yt-transcript = youtube_transcript.cli:main

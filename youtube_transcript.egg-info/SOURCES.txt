@@ -1,9 +1,12 @@
+.gitignore
 README.md
+requirements.txt
 setup.py
 youtube_transcript/__init__.py
 youtube_transcript/audio.py
 youtube_transcript/channel.py
 youtube_transcript/cli.py
+youtube_transcript/file_splitter_cli.py
 youtube_transcript/output.py
 youtube_transcript/transcript.py
 youtube_transcript/video.py
@@ -16,4 +19,5 @@ youtube_transcript.egg-info/top_level.txt
 youtube_transcript/utils/__init__.py
 youtube_transcript/utils/cache.py
 youtube_transcript/utils/exceptions.py
+youtube_transcript/utils/file_splitter.py
 youtube_transcript/utils/retry.py
